@@ -34,15 +34,10 @@ EOF
 cat << 'EOF'
 ** Install complete! **
 
-Run:
+If you are using WSL, run:
 
     sudo start-moby
 
-to start up the Moby/Docker Engine. If you are using a Linux machine or VM
-(rather than WSL), you may be able to execute:
-
-    sudo systemctl enable docker
-
-to ensure docker is running on boot.
+to start the Moby/Docker Engine.
 
 EOF
