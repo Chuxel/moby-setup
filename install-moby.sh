@@ -12,12 +12,6 @@ if ! dpkg -s ${required_packages} > /dev/null 2>&1; then
     apt-get -yq install ${required_packages}
 fi
 
-# Use legacy iptables if there's no systemd - e.g. WSL, containers
-#if ! systemctl > /dev/null 2>&1; then
-#    update-alternatives --set iptables /usr/sbin/iptables-legacy
-#    update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
-#fi
-
 . /etc/os-release
 wget -q https://packages.microsoft.com/config/${ID}/${VERSION_ID}/packages-microsoft-prod.deb
 dpkg -i packages-microsoft-prod.deb
