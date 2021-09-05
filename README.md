@@ -2,4 +2,5 @@
 
 ```bash
 wget -qO- https://github.com/Chuxel/moby-vscode/raw/main/install-moby.sh | sudo bash
+sudo usermod -aG docker $(whoami)
 ```
