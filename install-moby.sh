@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+USE_MOBY="${1:-true}"
+
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo or su before running this script.'
     exit 1
@@ -13,13 +15,20 @@ if ! dpkg -s ${required_packages} > /dev/null 2>&1; then
 fi
 
 . /etc/os-release
-wget -q https://packages.microsoft.com/config/${ID}/${VERSION_ID}/packages-microsoft-prod.deb
-dpkg -i packages-microsoft-prod.deb
-apt-get update
-apt-get -yq install moby-cli moby-buildx moby-compose moby-engine
-rm packages-microsoft-prod.deb
+if [ "${USE_MOBY}" = "true" ]; then
+    wget -q https://packages.microsoft.com/config/${ID}/${VERSION_ID}/packages-microsoft-prod.deb
+    dpkg -i packages-microsoft-prod.deb
+    apt-get update
+    apt-get -yq install moby-cli moby-buildx moby-compose moby-engine
+    rm packages-microsoft-prod.deb
+else
+    wget -qO- https://download.docker.com/linux/${ID}/gpg | gpg --dearmor > /usr/share/keyrings/docker-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/${ID} ${VERSION_CODENAME} stable" > /etc/apt/sources.list.d/docker.list
+    apt-get update
+    apt-get -yq install docker-ce-cli docker-ce containerd.io
+fi
 
-cat << 'EOF' > /usr/local/bin/mobyd
+cat << 'EOF' > /usr/local/bin/mobyctl
 #!/usr/bin/env bash
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo or su before running this script.'
@@ -28,22 +37,22 @@ fi
 case "${1-:"start"}" in
     start)
         if ! pidof dockerd > /dev/null 2>&1; then
-            echo "(*) Starting Moby Engine daemon..."
+            echo "(*) Starting Docker/Moby Engine daemon..."
             ( nohup dockerd > /tmp/dockerd.log 2>&1 ) &
             while ! pidof dockerd > /dev/null 2>&1; do
                 sleep 1
             done
             echo "(*) Done!"
         else
-            echo "(!) Moby Engine is already running."
+            echo "(!) Docker/Moby Engine is already running."
         fi
         ;;
     stop)
         if ! pidof dockerd > /dev/null 2>&1; then
-            echo "(*) Stopping Moby Engine..."
+            echo "(*) Stopping Docker/Moby Engine..."
             kill "$(pidof dockerd)"
         else
-            echo "(!) Moby Engine is not running."
+            echo "(!) Docker/Moby Engine is not running."
         fi
         ;;
     status)
@@ -58,14 +67,14 @@ case "${1-:"start"}" in
         ;;
 esac
 EOF
-chmod +x /usr/local/bin/mobyd
+chmod +x /usr/local/bin/mobyctl
 
 cat << 'EOF'
 ** Install complete! **
 
 If you are using WSL, run:
 
-    sudo mobyd start
+    sudo mobyctl start
 
 to start the Moby/Docker Engine.
 
