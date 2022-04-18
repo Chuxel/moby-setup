@@ -34,6 +34,7 @@ if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo or su before running this script.'
     exit 1
 fi
+export DOCKER_BUILDKIT=1
 case "${1-:"start"}" in
     start)
         if ! pidof dockerd > /dev/null 2>&1; then
@@ -48,7 +49,7 @@ case "${1-:"start"}" in
         fi
         ;;
     stop)
-        if ! pidof dockerd > /dev/null 2>&1; then
+        if pidof dockerd > /dev/null 2>&1; then
             echo "(*) Stopping Docker/Moby Engine..."
             kill "$(pidof dockerd)"
         else
