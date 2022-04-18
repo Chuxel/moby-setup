@@ -28,6 +28,13 @@ else
     apt-get -yq install docker-ce-cli docker-ce containerd.io
 fi
 
+if ! grep -q 'DOCKER_BUILDKIT' /etc/bash.bashrc > /dev/null 2>&1; then
+    echo 'export DOCKER_BUILDKIT=1' > /etc/bash.bashrc
+fi
+if [ -e '/etc/zsh' ] && ! grep -q 'DOCKER_BUILDKIT' /etc/zsh/zshenv > /dev/null 2>&1; then
+    echo 'export DOCKER_BUILDKIT=1' > /etc/zsh/zshenv
+fi
+
 cat << 'EOF' > /usr/local/bin/mobyctl
 #!/usr/bin/env bash
 if [ "$(id -u)" -ne 0 ]; then
