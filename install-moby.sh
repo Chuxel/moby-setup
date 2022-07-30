@@ -43,7 +43,7 @@ find_version_from_git_tags() {
     echo "${variable_name}=${!variable_name}"
 }
 
-required_packages="apt-transport-https curl ca-certificates pigz gnupg2 dirmngr"
+required_packages="apt-transport-https curl ca-certificates iptables pigz gnupg2 dirmngr"
 if ! dpkg -s ${required_packages} > /dev/null 2>&1; then
     apt-get update
     apt-get -yq install ${required_packages}
@@ -65,6 +65,12 @@ else
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/${ID} ${VERSION_CODENAME} stable" > /etc/apt/sources.list.d/docker.list
     apt-get update
     apt-get -yq install docker-ce-cli docker-ce docker-compose-plugin
+fi
+
+# Swap to legacy iptables for compatibility
+if type iptables-legacy > /dev/null 2>&1; then
+    update-alternatives --set iptables /usr/sbin/iptables-legacy
+    update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 fi
 
 if ! grep -q 'DOCKER_BUILDKIT' /etc/bash.bashrc > /dev/null 2>&1; then
