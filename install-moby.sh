@@ -8,7 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-required_packages="apt-transport-https wget ca-certificates lxc iptables pigz gnupg2"
+required_packages="apt-transport-https curl ca-certificates pigz gnupg2 dirmngr"
 if ! dpkg -s ${required_packages} > /dev/null 2>&1; then
     apt-get update
     apt-get -yq install ${required_packages}
@@ -25,7 +25,7 @@ else
     wget -qO- https://download.docker.com/linux/${ID}/gpg | gpg --dearmor > /usr/share/keyrings/docker-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/${ID} ${VERSION_CODENAME} stable" > /etc/apt/sources.list.d/docker.list
     apt-get update
-    apt-get -yq install docker-ce-cli docker-ce containerd.io
+    apt-get -yq install docker-ce-cli docker-ce docker-compose-plugin
 fi
 
 if ! grep -q 'DOCKER_BUILDKIT' /etc/bash.bashrc > /dev/null 2>&1; then
