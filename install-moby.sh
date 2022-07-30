@@ -49,7 +49,12 @@ if ! dpkg -s ${required_packages} > /dev/null 2>&1; then
     apt-get -yq install ${required_packages}
 fi
 
+
+# Source /etc/os-release to get OS info
 . /etc/os-release
+# Fetch host/container arch.
+architecture="$(dpkg --print-architecture)"
+
 if [ "${USE_MOBY}" = "true" ]; then
     wget -q https://packages.microsoft.com/config/${ID}/${VERSION_ID}/packages-microsoft-prod.deb
     dpkg -i packages-microsoft-prod.deb
