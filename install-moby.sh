@@ -74,6 +74,8 @@ fi
 if type docker-compose > /dev/null 2>&1; then
     echo "Docker Compose v1 already installed."
 else
+    compose_v1_version="1"
+    find_version_from_git_tags compose_v1_version "https://github.com/docker/compose" "tags/"
     curl -fsSL "https://github.com/docker/compose/releases/download/${compose_v1_version}/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
 fi
