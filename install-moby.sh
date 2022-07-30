@@ -49,7 +49,6 @@ if ! dpkg -s ${required_packages} > /dev/null 2>&1; then
     apt-get -yq install ${required_packages}
 fi
 
-
 # Source /etc/os-release to get OS info
 . /etc/os-release
 # Fetch host/container arch.
