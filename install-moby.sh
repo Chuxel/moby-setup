@@ -76,10 +76,10 @@ if type docker-compose > /dev/null 2>&1; then
 else
     compose_v1_version="1"
     find_version_from_git_tags compose_v1_version "https://github.com/docker/compose" "tags/"
+    echo "(*) Installing docker-compose ${compose_v1_version}..." 
     curl -fsSL "https://github.com/docker/compose/releases/download/${compose_v1_version}/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
 fi
-
 
 # Install docker-compose switch if not already installed - https://github.com/docker/compose-switch#manual-installation
 current_v1_compose_path="$(which docker-compose)"
