@@ -74,10 +74,10 @@ if type iptables-legacy > /dev/null 2>&1; then
 fi
 
 if ! grep -q 'DOCKER_BUILDKIT' /etc/bash.bashrc > /dev/null 2>&1; then
-    echo 'export DOCKER_BUILDKIT=1' > /etc/bash.bashrc
+    echo 'export DOCKER_BUILDKIT=1' >> /etc/bash.bashrc
 fi
 if [ -e '/etc/zsh' ] && ! grep -q 'DOCKER_BUILDKIT' /etc/zsh/zshenv > /dev/null 2>&1; then
-    echo 'export DOCKER_BUILDKIT=1' > /etc/zsh/zshenv
+    echo 'export DOCKER_BUILDKIT=1' >> /etc/zsh/zshenv
 fi
 
 # Install docker compose
