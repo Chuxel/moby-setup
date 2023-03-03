@@ -3,7 +3,7 @@
 To install using Moby on Linux:
 
 ```bash
-sudo apt-get update && sudo apt-get-yq intsall wget
+sudo apt-get update && sudo apt-get-yq install wget
 sudo bash -c "$(wget -qO- https://github.com/Chuxel/moby-vscode/raw/main/install-moby.sh)"
 sudo usermod -aG docker $(whoami)
 ```
@@ -11,7 +11,7 @@ sudo usermod -aG docker $(whoami)
 To install using Docker CE on Linux:
 
 ```bash
-sudo apt-get update && sudo apt-get-yq intsall wget
+sudo apt-get update && sudo apt-get-yq install wget
 sudo bash -c "$(wget -qO- https://github.com/Chuxel/moby-vscode/raw/main/install-moby.sh)" -- false
 sudo usermod -aG docker $(whoami)
 ```
