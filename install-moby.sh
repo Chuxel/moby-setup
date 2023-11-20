@@ -2,7 +2,7 @@
 set -e
 
 USE_MOBY="${1:-true}"
-DOCKER_DASH_COMPOSE_VERSION=${2:-"v1"} # v1 or v2
+DOCKER_DASH_COMPOSE_VERSION=${2:-"v2"} # v1 or v2
 
 if [ "$(id -u)" -ne 0 ]; then
     echo -e 'Script must be run as root. Use sudo or su before running this script.'
